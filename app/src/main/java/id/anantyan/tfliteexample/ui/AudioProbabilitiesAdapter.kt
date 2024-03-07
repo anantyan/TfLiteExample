@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import id.anantyan.tfliteexample.R
 import id.anantyan.tfliteexample.databinding.ItemProbabilityAudioBinding
+import id.anantyan.tfliteexample.helper.NoiseHelper
 import org.tensorflow.lite.support.label.Category
 
 class AudioProbabilitiesAdapter : ListAdapter<Category, AudioProbabilitiesAdapter.ViewHolder>(Comparator) {
@@ -49,7 +50,7 @@ class AudioProbabilitiesAdapter : ListAdapter<Category, AudioProbabilitiesAdapte
 
         fun bind(label: String, score: Float, index: Int) {
             with(binding) {
-                labelTextView.text = label
+                labelTextView.text = NoiseHelper.getNoiseLabel(label)
                 progressBar.progressBackgroundTintList = ColorStateList.valueOf(backgroundProgressColorList[index % backgroundProgressColorList.size])
                 progressBar.progressTintList = ColorStateList.valueOf(primaryProgressColorList[index % primaryProgressColorList.size])
                 val newValue = (score * 100).toInt()
