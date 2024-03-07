@@ -21,8 +21,7 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
     private lateinit var audioHelper: AudioClassificationHelper
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _fragmentBinding = FragmentAudioBinding.inflate(inflater, container, false)
         return fragmentAudioBinding.root
@@ -32,8 +31,7 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
         super.onViewCreated(view, savedInstanceState)
         fragmentAudioBinding.recyclerView.adapter = adapter
         audioHelper = AudioClassificationHelper(
-            requireContext(),
-            this
+            requireContext(), this
         )
 
         fragmentAudioBinding.bottomSheetLayout.modelSelector.setOnCheckedChangeListener { group, checkedId ->
@@ -49,11 +47,13 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
                     audioHelper.currentModel = AudioClassificationHelper.SPEECH_COMMAND_MODEL
                     audioHelper.initClassifier()
                 }
+
                 R.id.noise_model -> {
                     audioHelper.stopAudioClassification()
                     audioHelper.currentModel = AudioClassificationHelper.NOISE
                     audioHelper.initClassifier()
                 }
+
                 R.id.bird_model -> {
                     audioHelper.stopAudioClassification()
                     audioHelper.currentModel = AudioClassificationHelper.BIRD_MODEL
@@ -62,22 +62,20 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
             }
         }
 
-        fragmentAudioBinding.bottomSheetLayout.spinnerOverlap.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                audioHelper.stopAudioClassification()
-                audioHelper.overlap = 0.25f * position
-                audioHelper.startAudioClassification()
-            }
+        fragmentAudioBinding.bottomSheetLayout.spinnerOverlap.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    audioHelper.stopAudioClassification()
+                    audioHelper.overlap = 0.25f * position
+                    audioHelper.startAudioClassification()
+                }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                // no op
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    // no op
+                }
             }
-        }
 
         fragmentAudioBinding.bottomSheetLayout.resultsMinus.setOnClickListener {
             if (audioHelper.numOfResults > 1) {
@@ -123,9 +121,8 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
             if (audioHelper.numThreads > 1) {
                 audioHelper.stopAudioClassification()
                 audioHelper.numThreads--
-                fragmentAudioBinding.bottomSheetLayout.threadsValue.text = audioHelper
-                    .numThreads
-                    .toString()
+                fragmentAudioBinding.bottomSheetLayout.threadsValue.text =
+                    audioHelper.numThreads.toString()
                 audioHelper.initClassifier()
             }
         }
@@ -134,37 +131,31 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
             if (audioHelper.numThreads < 4) {
                 audioHelper.stopAudioClassification()
                 audioHelper.numThreads++
-                fragmentAudioBinding.bottomSheetLayout.threadsValue.text = audioHelper
-                    .numThreads
-                    .toString()
+                fragmentAudioBinding.bottomSheetLayout.threadsValue.text =
+                    audioHelper.numThreads.toString()
                 audioHelper.initClassifier()
             }
         }
 
-        fragmentAudioBinding.bottomSheetLayout.spinnerDelegate.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                audioHelper.stopAudioClassification()
-                audioHelper.currentDelegate = position
-                audioHelper.initClassifier()
-            }
+        fragmentAudioBinding.bottomSheetLayout.spinnerDelegate.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    audioHelper.stopAudioClassification()
+                    audioHelper.currentDelegate = position
+                    audioHelper.initClassifier()
+                }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                /* no op */
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
             }
-        }
 
         fragmentAudioBinding.bottomSheetLayout.spinnerOverlap.setSelection(2, false)
         fragmentAudioBinding.bottomSheetLayout.spinnerDelegate.setSelection(0, false)
     }
 
     override fun onResume() {
-        super.onResume()
-        /*if (!MainActivity.hasPermissions(requireContext())) {
+        super.onResume()/*if (!MainActivity.hasPermissions(requireContext())) {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             intent.data = Uri.fromParts("package", requireContext().packageName, null)
             startActivity(intent)
@@ -188,7 +179,8 @@ class AudioFragment : Fragment(), AudioClassificationHelper.AudioClassificationL
     }
 
     override fun onResult(results: List<Category>, inferenceTime: Long) {
-        fragmentAudioBinding.bottomSheetLayout.inferenceTimeVal.text = String.format("%d ms", inferenceTime)
+        fragmentAudioBinding.bottomSheetLayout.inferenceTimeVal.text =
+            String.format("%d ms", inferenceTime)
         adapter.submitList(results)
     }
 

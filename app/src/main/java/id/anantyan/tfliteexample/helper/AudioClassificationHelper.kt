@@ -19,7 +19,7 @@ class AudioClassificationHelper(
     var overlap: Float = DEFAULT_OVERLAP_VALUE,
     var numOfResults: Int = DEFAULT_NUM_OF_RESULTS,
     var currentDelegate: Int = 0,
-    var numThreads: Int = 2
+    var numThreads: Int = 4
 ) {
     private lateinit var classifier: AudioClassifier
     private lateinit var tensorAudio: TensorAudio
@@ -99,8 +99,8 @@ class AudioClassificationHelper(
         var inferenceTime = SystemClock.uptimeMillis()
         val output = classifier.classify(tensorAudio)
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime
-        output.forEach {
-            listener.onResult(it.categories, inferenceTime)
+        output.forEach { classification ->
+            listener.onResult(classification.categories, inferenceTime)
         }
     }
 
@@ -112,8 +112,8 @@ class AudioClassificationHelper(
     companion object {
         const val DELEGATE_CPU = 0
         const val DELEGATE_NNAPI = 1
-        const val DISPLAY_THRESHOLD = 0.3f
-        const val DEFAULT_NUM_OF_RESULTS = 2
+        const val DISPLAY_THRESHOLD = 0.1f
+        const val DEFAULT_NUM_OF_RESULTS = 1
         const val DEFAULT_OVERLAP_VALUE = 0.5f
         const val YAMNET_MODEL = "yamnet.tflite"
         const val SPEECH_COMMAND_MODEL = "speech.tflite"

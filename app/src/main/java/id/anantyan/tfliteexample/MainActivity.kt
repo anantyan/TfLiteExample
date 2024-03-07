@@ -30,11 +30,15 @@ class MainActivity : AppCompatActivity() {
         val host = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = host.navController
         binding.bottomNavBar.setupWithNavController(navController)
-        shouldPermission()
+        if (hasPermissionAudio(this)) {
+            shouldPermission()
+        }
     }
 
     companion object {
-        /** Metode kenyamanan yang digunakan untuk memeriksa apakah semua izin yang diperlukan oleh aplikasi ini diberikan */
+        /**
+         * Digunakan untuk memeriksa apakah semua izin yang diperlukan oleh aplikasi ini diberikan
+         * */
         private val PERMISSIONS_REQUIRED = arrayOf(
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.CAMERA
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             else -> {
-                requestPermissionLauncher.launch(mutableListOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA).toTypedArray())
+                requestPermissionLauncher.launch(PERMISSIONS_REQUIRED)
             }
         }
     }

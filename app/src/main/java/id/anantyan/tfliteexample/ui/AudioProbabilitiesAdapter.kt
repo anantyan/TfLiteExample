@@ -50,11 +50,8 @@ class AudioProbabilitiesAdapter : ListAdapter<Category, AudioProbabilitiesAdapte
         fun bind(label: String, score: Float, index: Int) {
             with(binding) {
                 labelTextView.text = label
-
                 progressBar.progressBackgroundTintList = ColorStateList.valueOf(backgroundProgressColorList[index % backgroundProgressColorList.size])
-
                 progressBar.progressTintList = ColorStateList.valueOf(primaryProgressColorList[index % primaryProgressColorList.size])
-
                 val newValue = (score * 100).toInt()
                 progressBar.setProgress(newValue, true)
             }
